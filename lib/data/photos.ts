@@ -8,34 +8,34 @@ export interface Photo {
   photographer: string
 }
 
-// Mock data - in production this would come from a database
+
 export const initialPhotos: Photo[] = [
   {
     id: "1",
     title: "Лекция по алгоритмам",
     description: "Студенты на лекции по алгоритмам и структурам данных",
-    imageUrl: "/students-in-computer-science-lecture.jpg",
+    imageUrl: "/лекция.jpg",
     event: "Лекция",
-    date: "2025-01-15",
-    photographer: "Иванов И.И.",
+    date: "2025-11-15",
+    photographer: "GymCoders",
   },
   {
     id: "2",
     title: "Практическое занятие по программированию",
     description: "Работа студентов над проектами в компьютерном классе",
-    imageUrl: "/students-programming-in-computer-lab.jpg",
+    imageUrl: "/практика.jpg",
     event: "Практика",
-    date: "2025-01-20",
-    photographer: "Петрова А.С.",
+    date: "2025-11-15",
+    photographer: "GymCoders",
   },
   {
     id: "3",
     title: "Семинар по базам данных",
     description: "Обсуждение проектирования баз данных",
-    imageUrl: "/database-design-seminar-classroom.jpg",
+    imageUrl: "/семинар.jpg",
     event: "Семинар",
-    date: "2025-02-01",
-    photographer: "Сидоров П.В.",
+    date: "2025-11-15",
+    photographer: "GymCoders",
   },
   {
     id: "4",
