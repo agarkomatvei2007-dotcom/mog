@@ -19,7 +19,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
-    // Check if user is already authenticated
     const auth = sessionStorage.getItem("isAuthenticated")
     const adminStatus = sessionStorage.getItem("isAdmin")
     if (auth === "true") {
