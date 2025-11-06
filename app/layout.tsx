@@ -21,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`font-sans antialiased`}>
+      <body
+        className={`font-sans antialiased ${_geist.className}`} 
+        suppressHydrationWarning={true} 
+      >
         <AuthProvider>{children}</AuthProvider>
         <Analytics />
       </body>

@@ -1,6 +1,6 @@
 "use client"
 
-import { use, useEffect } from "react"
+import { use, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
@@ -15,10 +15,13 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   const { videos, incrementViews } = useVideos()
   const router = useRouter()
 
+   const hasIncremented = useRef(false) 
+
   const video = videos.find((v) => v.id === id)
 
   useEffect(() => {
-    if (video) {
+    if (video && !hasIncremented.current) {
+      hasIncremented.current = true   
       incrementViews(id)
     }
   }, [id, video, incrementViews])
