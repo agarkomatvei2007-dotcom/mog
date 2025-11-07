@@ -125,7 +125,7 @@ export default function AdminPage() {
 
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
               <h1 className="text-4xl font-bold mb-2">Панель администратора</h1>
               <p className="text-muted-foreground">Управление содержимым методической копилки</p>
@@ -135,7 +135,7 @@ export default function AdminPage() {
           {/* Lectures Management */}
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     <BookOpen className="h-5 w-5" />
@@ -147,7 +147,7 @@ export default function AdminPage() {
                   <Plus className="h-4 w-4 mr-2" />
                   Добавить лекцию
                 </Button>
-              </div>
+              </div>  
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -181,7 +181,7 @@ export default function AdminPage() {
           {/* Photos Management */}
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     <ImageIcon className="h-5 w-5" />
@@ -227,7 +227,7 @@ export default function AdminPage() {
           {/* Videos Management */}
           <Card className="mb-8">
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     <VideoIcon className="h-5 w-5" />
@@ -275,7 +275,7 @@ export default function AdminPage() {
           {/* Experience Management */}
           <Card>
             <CardHeader>
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     <MessageSquare className="h-5 w-5" />
