@@ -45,7 +45,7 @@ export default function HomePage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">Методическая копилка</h1>
             <p className="text-xl text-muted-foreground mb-8 text-pretty">
-              Полезный ресурс для обмена педагогическим опытом, хранения материалов по информатике и смежным дисциплинам
+              Полезный ресурс для обмена педагогическим опытом, хранения материалов по разным дисциплинам
             </p>
             <div className="flex flex-col gap-4  sm:flex-row flex justify-center">
               <Link href="/lectures">
@@ -86,8 +86,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        {/* About Section */}
         <section className="bg-muted/30 py-16 px-4">
           <div className="container mx-auto max-w-4xl">
             <Card>
@@ -96,13 +94,13 @@ export default function HomePage() {
               </CardHeader>
               <CardContent className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Методическая копилка создана для преподавателей информатики и смежных дисциплин. Здесь вы найдете
-                  учебные материалы, фотографии с занятий, видеолекции и сможете поделиться своим педагогическим опытом
-                  с коллегами.
+                  Методическая копилка — это не просто сборник материалов, а живое сообщество преподавателей, объединённых любовью к своему делу.
+                  Здесь вы откроете для себя богатую коллекцию методических разработок, видеолекций, презентаций и фотоматериалов с занятий.
+                  Каждый педагог может не только воспользоваться готовыми ресурсами, но и внести собственный вклад в общее дело, поделившись опытом, идеями и достижениями.
                 </p>
                 <p>
                   Наша цель — создать удобную платформу для обмена знаниями и методическими разработками, которая
-                  поможет повысить качество образовательного процесса.
+                  поможет повысить качество образовательного процесса.Пусть Методическая копилка станет вашим источником вдохновения и развития!
                 </p>
               </CardContent>
             </Card>
@@ -112,7 +110,13 @@ export default function HomePage() {
 
       <footer className="border-t py-8 px-4 mt-16">
         <div className="container mx-auto text-center text-sm text-muted-foreground">
-          <p>© 2025 Методическая копилка. Все права защищены.</p>
+          <p>© 2025 Методическая копилка. При поддержке Gym Coders.</p>
+        </div>
+        <div className="container mx-auto text-sm text-muted-foreground">
+        <p>наши контакты:</p>
+        <p>+7-(747)-737-80-92</p>
+        <p>+7-(708)-939-80-60</p>
+        <p>+7-(747)-934-92-38</p>
         </div>
       </footer>
     </div>
