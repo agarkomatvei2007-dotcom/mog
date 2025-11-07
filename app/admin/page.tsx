@@ -120,7 +120,7 @@ export default function AdminPage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
-              <h1 className="text-4xl font-bold mb-2">Панель администратора</h1>
+              <h1 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">Панель администратора</h1>
               <p className="text-muted-foreground">Управление содержимым методической копилки</p>
             </div>
           </div>

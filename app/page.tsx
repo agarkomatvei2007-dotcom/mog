@@ -43,7 +43,7 @@ export default function HomePage() {
             <div className="flex justify-center mb-6">
               <GraduationCap className="h-16 w-16 text-primary" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-balance">Методическая копилка</h1>
+            <h1 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">Методическая копилка</h1>
             <p className="text-xl text-muted-foreground mb-8 text-pretty">
               Полезный ресурс для обмена педагогическим опытом, хранения материалов по разным дисциплинам
             </p>
