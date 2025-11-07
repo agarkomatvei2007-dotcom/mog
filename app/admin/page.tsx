@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
@@ -10,15 +10,15 @@ import { useAuth } from "@/lib/auth-context"
 import { useLectures } from "@/lib/hooks/use-lectures"
 import { usePhotos } from "@/lib/hooks/use-photos"
 import { useVideos } from "@/lib/hooks/use-videos"
-import { useExperiences } from "@/lib/hooks/use-experiences"
+import { useExperiences } from "@/lib/hooks/use-supabase-experiences"
 import { LectureForm } from "@/components/admin/lecture-form"
 import { PhotoForm } from "@/components/admin/photo-form"
 import { VideoForm } from "@/components/admin/video-form"
 import { ExperienceForm } from "@/components/admin/experience-form"
+import type { Experience } from "@/lib/hooks/use-supabase-experiences"
 import type { Lecture } from "@/lib/data/lectures"
 import type { Photo } from "@/lib/data/photos"
 import type { Video } from "@/lib/data/videos"
-import type { Experience } from "@/lib/data/experiences"
 import { Plus, Pencil, Trash2, BookOpen, ImageIcon, VideoIcon, MessageSquare } from "lucide-react"
 
 export default function AdminPage() {
@@ -28,14 +28,15 @@ export default function AdminPage() {
   const { photos, addPhoto, updatePhoto, deletePhoto } = usePhotos()
   const { videos, addVideo, updateVideo, deleteVideo } = useVideos()
   const { experiences, addExperience, updateExperience, deleteExperience } = useExperiences()
+
   const [isAddLectureDialogOpen, setIsAddLectureDialogOpen] = useState(false)
   const [isAddPhotoDialogOpen, setIsAddPhotoDialogOpen] = useState(false)
   const [isAddVideoDialogOpen, setIsAddVideoDialogOpen] = useState(false)
   const [isAddExperienceDialogOpen, setIsAddExperienceDialogOpen] = useState(false)
-  const [editingLecture, setEditingLecture] = useState<Lecture | null>(null)
-  const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null)
-  const [editingVideo, setEditingVideo] = useState<Video | null>(null)
-  const [editingExperience, setEditingExperience] = useState<Experience | null>(null)
+  const [editingLecture, setEditingLecture] = useState<Lecture | undefined>(undefined)
+  const [editingPhoto, setEditingPhoto] = useState<Photo | undefined>(undefined)
+  const [editingVideo, setEditingVideo] = useState<Video | undefined>(undefined)
+  const [editingExperience, setEditingExperience] = useState<Experience | undefined>(undefined)
 
   useEffect(() => {
     if (!isAuthenticated || !isAdmin) {
@@ -43,9 +44,7 @@ export default function AdminPage() {
     }
   }, [isAuthenticated, isAdmin, router])
 
-  if (!isAuthenticated || !isAdmin) {
-    return null
-  }
+  if (!isAuthenticated || !isAdmin) return null
 
   const handleAddLecture = (data: Omit<Lecture, "id">) => {
     addLecture(data)
@@ -55,32 +54,28 @@ export default function AdminPage() {
   const handleUpdateLecture = (data: Omit<Lecture, "id">) => {
     if (editingLecture) {
       updateLecture(editingLecture.id, data)
-      setEditingLecture(null)
+      setEditingLecture(undefined)
     }
   }
 
   const handleDeleteLecture = (id: string) => {
-    if (confirm("Вы уверены, что хотите удалить эту лекцию?")) {
-      deleteLecture(id)
-    }
+    if (confirm("Удалить лекцию?")) deleteLecture(id)
   }
 
-  const handleAddPhoto = (data: Omit<Photo, "id">) => {
-    addPhoto(data)
+  const handleAddPhoto = async (data: Omit<Photo, "id">) => {
+    await addPhoto(data)
     setIsAddPhotoDialogOpen(false)
   }
 
-  const handleUpdatePhoto = (data: Omit<Photo, "id">) => {
+  const handleUpdatePhoto = async (data: Omit<Photo, "id">) => {
     if (editingPhoto) {
-      updatePhoto(editingPhoto.id, data)
-      setEditingPhoto(null)
+      await updatePhoto(editingPhoto.id, data)
+      setEditingPhoto(undefined)
     }
   }
 
   const handleDeletePhoto = (id: string) => {
-    if (confirm("Вы уверены, что хотите удалить это фото?")) {
-      deletePhoto(id)
-    }
+    if (confirm("Удалить фото?")) deletePhoto(id)
   }
 
   const handleAddVideo = (data: Omit<Video, "id" | "views">) => {
@@ -91,31 +86,29 @@ export default function AdminPage() {
   const handleUpdateVideo = (data: Omit<Video, "id" | "views">) => {
     if (editingVideo) {
       updateVideo(editingVideo.id, data)
-      setEditingVideo(null)
+      setEditingVideo(undefined)
     }
   }
 
   const handleDeleteVideo = (id: string) => {
-    if (confirm("Вы уверены, что хотите удалить это видео?")) {
-      deleteVideo(id)
-    }
+    if (confirm("Удалить видео?")) deleteVideo(id)
   }
 
-  const handleAddExperience = (data: Omit<Experience, "id" | "likes" | "comments">) => {
-    addExperience(data)
+  const handleAddExperience = async (data: any) => {
+    await addExperience(data)
     setIsAddExperienceDialogOpen(false)
   }
 
-  const handleUpdateExperience = (data: Omit<Experience, "id" | "likes" | "comments">) => {
+  const handleUpdateExperience = async (data: any) => {
     if (editingExperience) {
-      updateExperience(editingExperience.id, data)
-      setEditingExperience(null)
+      await updateExperience(editingExperience.id, data)
+      setEditingExperience(undefined)
     }
   }
 
-  const handleDeleteExperience = (id: string) => {
-    if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-      deleteExperience(id)
+  const handleDeleteExperience = async (id: string) => {
+    if (confirm("Удалить запись?")) {
+      await deleteExperience(id)
     }
   }
 
@@ -132,7 +125,7 @@ export default function AdminPage() {
             </div>
           </div>
 
-          {/* Lectures Management */}
+          {/* Лекции */}
           <Card className="mb-8">
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -155,10 +148,7 @@ export default function AdminPage() {
                   <p className="text-center text-muted-foreground py-8">Лекции отсутствуют</p>
                 ) : (
                   lectures.map((lecture) => (
-                    <div
-                      key={lecture.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                    >
+                    <div key={lecture.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50">
                       <div className="flex-1">
                         <h3 className="font-semibold">{lecture.title}</h3>
                         <p className="text-sm text-muted-foreground">{lecture.category}</p>
@@ -178,7 +168,7 @@ export default function AdminPage() {
             </CardContent>
           </Card>
 
-          {/* Photos Management */}
+          {/* Фото */}
           <Card className="mb-8">
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -201,10 +191,7 @@ export default function AdminPage() {
                   <p className="text-center text-muted-foreground py-8">Фотографии отсутствуют</p>
                 ) : (
                   photos.map((photo) => (
-                    <div
-                      key={photo.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                    >
+                    <div key={photo.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50">
                       <div className="flex-1">
                         <h3 className="font-semibold">{photo.title}</h3>
                         <p className="text-sm text-muted-foreground">{photo.event}</p>
@@ -224,7 +211,7 @@ export default function AdminPage() {
             </CardContent>
           </Card>
 
-          {/* Videos Management */}
+          {/* Видео */}
           <Card className="mb-8">
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -247,10 +234,7 @@ export default function AdminPage() {
                   <p className="text-center text-muted-foreground py-8">Видеолекции отсутствуют</p>
                 ) : (
                   videos.map((video) => (
-                    <div
-                      key={video.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                    >
+                    <div key={video.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50">
                       <div className="flex-1">
                         <h3 className="font-semibold">{video.title}</h3>
                         <p className="text-sm text-muted-foreground">
@@ -272,7 +256,7 @@ export default function AdminPage() {
             </CardContent>
           </Card>
 
-          {/* Experience Management */}
+          {/* Обмен опытом */}
           <Card>
             <CardHeader>
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -295,14 +279,11 @@ export default function AdminPage() {
                   <p className="text-center text-muted-foreground py-8">Записи отсутствуют</p>
                 ) : (
                   experiences.map((experience) => (
-                    <div
-                      key={experience.id}
-                      className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                    >
+                    <div key={experience.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50">
                       <div className="flex-1">
                         <h3 className="font-semibold">{experience.title}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {experience.author} • {experience.category}
+                          {experience.author} • {experience.category || "Без категории"}
                         </p>
                       </div>
                       <div className="flex gap-2">
@@ -322,107 +303,103 @@ export default function AdminPage() {
         </div>
       </main>
 
-      {/* Add Lecture Dialog */}
-      <Dialog open={isAddLectureDialogOpen} onOpenChange={setIsAddLectureDialogOpen}>
+      {/* Лекции */}
+      <Dialog open={isAddLectureDialogOpen || !!editingLecture} onOpenChange={(open) => {
+        if (!open) {
+          setIsAddLectureDialogOpen(false)
+          setEditingLecture(undefined)
+        }
+      }}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Добавить новую лекцию</DialogTitle>
-            <DialogDescription>Заполните форму для добавления новой лекции в систему</DialogDescription>
+            <DialogTitle>{editingLecture ? "Редактировать лекцию" : "Добавить новую лекцию"}</DialogTitle>
+            <DialogDescription>
+              {editingLecture ? "Внесите изменения в лекцию" : "Заполните форму для добавления новой лекции"}
+            </DialogDescription>
           </DialogHeader>
-          <LectureForm onSubmit={handleAddLecture} onCancel={() => setIsAddLectureDialogOpen(false)} />
+          <LectureForm
+            lecture={editingLecture}
+            onSubmit={editingLecture ? handleUpdateLecture : handleAddLecture}
+            onCancel={() => {
+              setIsAddLectureDialogOpen(false)
+              setEditingLecture(undefined)
+            }}
+          />
         </DialogContent>
       </Dialog>
 
-      {/* Edit Lecture Dialog */}
-      <Dialog open={!!editingLecture} onOpenChange={() => setEditingLecture(null)}>
+      {/* Фото */}
+      <Dialog open={isAddPhotoDialogOpen || !!editingPhoto} onOpenChange={(open) => {
+        if (!open) {
+          setIsAddPhotoDialogOpen(false)
+          setEditingPhoto(undefined)
+        }
+      }}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingPhoto ? "Редактировать фото" : "Добавить новое фото"}</DialogTitle>
+            <DialogDescription>
+              {editingPhoto ? "Внесите изменения в фотографию" : "Заполните форму для добавления фотографии"}
+            </DialogDescription>
+          </DialogHeader>
+          <PhotoForm
+            photo={editingPhoto}
+            onSubmit={editingPhoto ? handleUpdatePhoto : handleAddPhoto}
+            onCancel={() => {
+              setIsAddPhotoDialogOpen(false)
+              setEditingPhoto(undefined)
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Видео */}
+      <Dialog open={isAddVideoDialogOpen || !!editingVideo} onOpenChange={(open) => {
+        if (!open) {
+          setIsAddVideoDialogOpen(false)
+          setEditingVideo(undefined)
+        }
+      }}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingVideo ? "Редактировать видео" : "Добавить новое видео"}</DialogTitle>
+            <DialogDescription>
+              {editingVideo ? "Внесите изменения в видеолекцию" : "Заполните форму для добавления видеолекции"}
+            </DialogDescription>
+          </DialogHeader>
+          <VideoForm
+            video={editingVideo}
+            onSubmit={editingVideo ? handleUpdateVideo : handleAddVideo}
+            onCancel={() => {
+              setIsAddVideoDialogOpen(false)
+              setEditingVideo(undefined)
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Опыт */}
+      <Dialog open={isAddExperienceDialogOpen || !!editingExperience} onOpenChange={(open) => {
+        if (!open) {
+          setIsAddExperienceDialogOpen(false)
+          setEditingExperience(undefined)
+        }
+      }}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Редактировать лекцию</DialogTitle>
-            <DialogDescription>Внесите изменения в лекцию</DialogDescription>
+            <DialogTitle>{editingExperience ? "Редактировать запись" : "Добавить новую запись"}</DialogTitle>
+            <DialogDescription>
+              {editingExperience ? "Внесите изменения в запись" : "Заполните форму для добавления записи"}
+            </DialogDescription>
           </DialogHeader>
-          {editingLecture && (
-            <LectureForm
-              lecture={editingLecture}
-              onSubmit={handleUpdateLecture}
-              onCancel={() => setEditingLecture(null)}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Photo Dialog */}
-      <Dialog open={isAddPhotoDialogOpen} onOpenChange={setIsAddPhotoDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Добавить новое фото</DialogTitle>
-            <DialogDescription>Заполните форму для добавления фотографии в галерею</DialogDescription>
-          </DialogHeader>
-          <PhotoForm onSubmit={handleAddPhoto} onCancel={() => setIsAddPhotoDialogOpen(false)} />
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Photo Dialog */}
-      <Dialog open={!!editingPhoto} onOpenChange={() => setEditingPhoto(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Редактировать фото</DialogTitle>
-            <DialogDescription>Внесите изменения в фотографию</DialogDescription>
-          </DialogHeader>
-          {editingPhoto && (
-            <PhotoForm photo={editingPhoto} onSubmit={handleUpdatePhoto} onCancel={() => setEditingPhoto(null)} />
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Video Dialog */}
-      <Dialog open={isAddVideoDialogOpen} onOpenChange={setIsAddVideoDialogOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Добавить новое видео</DialogTitle>
-            <DialogDescription>Заполните форму для добавления видеолекции</DialogDescription>
-          </DialogHeader>
-          <VideoForm onSubmit={handleAddVideo} onCancel={() => setIsAddVideoDialogOpen(false)} />
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Video Dialog */}
-      <Dialog open={!!editingVideo} onOpenChange={() => setEditingVideo(null)}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Редактировать видео</DialogTitle>
-            <DialogDescription>Внесите изменения в видеолекцию</DialogDescription>
-          </DialogHeader>
-          {editingVideo && (
-            <VideoForm video={editingVideo} onSubmit={handleUpdateVideo} onCancel={() => setEditingVideo(null)} />
-          )}
-        </DialogContent>
-      </Dialog>
-
-      {/* Add Experience Dialog */}
-      <Dialog open={isAddExperienceDialogOpen} onOpenChange={setIsAddExperienceDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Добавить новую запись</DialogTitle>
-            <DialogDescription>Заполните форму для добавления записи об обмене опытом</DialogDescription>
-          </DialogHeader>
-          <ExperienceForm onSubmit={handleAddExperience} onCancel={() => setIsAddExperienceDialogOpen(false)} />
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Experience Dialog */}
-      <Dialog open={!!editingExperience} onOpenChange={() => setEditingExperience(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Редактировать запись</DialogTitle>
-            <DialogDescription>Внесите изменения в запись</DialogDescription>
-          </DialogHeader>
-          {editingExperience && (
-            <ExperienceForm
-              experience={editingExperience}
-              onSubmit={handleUpdateExperience}
-              onCancel={() => setEditingExperience(null)}
-            />
-          )}
+          <ExperienceForm
+            experience={editingExperience}
+            onSubmit={editingExperience ? handleUpdateExperience : handleAddExperience}
+            onCancel={() => {
+              setIsAddExperienceDialogOpen(false)
+              setEditingExperience(undefined)
+            }}
+          />
         </DialogContent>
       </Dialog>
     </div>
