@@ -109,14 +109,15 @@ export default function HomePage() {
       </main>
 
       <footer className="border-t py-8 px-4 mt-16">
-        <div className="container mx-auto text-center text-sm text-muted-foreground">
-          <p>© 2025 Методическая копилка. При поддержке Gym Coders.</p>
-        </div>
+       
         <div className="container mx-auto text-sm text-muted-foreground">
         <p>наши контакты:</p>
         <p>+7-(747)-737-80-92</p>
-        <p>+7-(708)-939-80-60</p>
+        <p>+7-(708)-939-80-60</p>    
         <p>+7-(747)-934-92-38</p>
+        </div>
+                <div className="container mx-auto text-right text-sm text-muted-foreground">
+          <p>© 2025 Методическая копилка. При поддержке Gym Coders.</p>
         </div>
       </footer>
     </div>
