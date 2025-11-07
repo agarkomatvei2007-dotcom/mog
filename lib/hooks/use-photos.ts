@@ -1,48 +1,48 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { type Photo, initialPhotos } from "@/lib/data/photos"
+import { supabase } from "@/lib/supabase"
+
+export type Photo = {
+  id: string
+  title: string
+  description: string
+  imageUrl: string
+  event: string
+  date: string
+  photographer: string
+  created_at?: string
+}
 
 export function usePhotos() {
   const [photos, setPhotos] = useState<Photo[]>([])
 
   useEffect(() => {
-    // Load photos from localStorage or use initial data
-    const stored = localStorage.getItem("photos")
-    if (stored) {
-      setPhotos(JSON.parse(stored))
-    } else {
-      setPhotos(initialPhotos)
-      localStorage.setItem("photos", JSON.stringify(initialPhotos))
-    }
+    supabase
+      .from("photos")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => setPhotos(data || []))
   }, [])
 
-  const addPhoto = (photo: Omit<Photo, "id">) => {
-    const newPhoto = {
-      ...photo,
-      id: Date.now().toString(),
-    }
-    const updated = [...photos, newPhoto]
-    setPhotos(updated)
-    localStorage.setItem("photos", JSON.stringify(updated))
+  const addPhoto = async (photo: Omit<Photo, "id">) => {
+    const { data } = await supabase.from("photos").insert(photo).select()
+    if (data) setPhotos((prev) => [data[0], ...prev])
   }
 
-  const updatePhoto = (id: string, photo: Partial<Photo>) => {
-    const updated = photos.map((p) => (p.id === id ? { ...p, ...photo } : p))
-    setPhotos(updated)
-    localStorage.setItem("photos", JSON.stringify(updated))
+  const updatePhoto = async (id: string, updates: Partial<Photo>) => {
+    const { data } = await supabase
+      .from("photos")
+      .update(updates)
+      .eq("id", id)
+      .select()
+    if (data) setPhotos((prev) => prev.map((p) => (p.id === id ? data[0] : p)))
   }
 
-  const deletePhoto = (id: string) => {
-    const updated = photos.filter((p) => p.id !== id)
-    setPhotos(updated)
-    localStorage.setItem("photos", JSON.stringify(updated))
+  const deletePhoto = async (id: string) => {
+    await supabase.from("photos").delete().eq("id", id)
+    setPhotos((prev) => prev.filter((p) => p.id !== id))
   }
 
-  return {
-    photos,
-    addPhoto,
-    updatePhoto,
-    deletePhoto,
-  }
-}
+  return { photos, addPhoto, updatePhoto, deletePhoto }
+} 
