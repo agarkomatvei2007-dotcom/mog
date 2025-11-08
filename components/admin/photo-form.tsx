@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { Photo } from "@/lib/data/photos"
+import { supabase } from "@/lib/supabase"
+
 
 interface PhotoFormProps {
   photo?: Photo
@@ -53,18 +55,44 @@ export function PhotoForm({ photo, onSubmit, onCancel }: PhotoFormProps) {
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="imageUrl">URL изображения</Label>
-        <Input
-          id="imageUrl"
-          type="url"
-          value={formData.imageUrl}
-          onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-          placeholder="/--------.jpg"
-          required
-        />
-        <p className="text-xs text-muted-foreground">Используйте placeholder URL или загрузите изображение</p>
-      </div>
+<div className="space-y-2">
+  <Label>URL изображения</Label>
+
+  {/* Поле ввода URL */}
+  <Input
+    type="imageUrl"
+    value={formData.imageUrl}
+    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+    placeholder="/"
+  />
+
+  {/* Выбор файла */}
+  <Input
+    type="file"
+    accept="image/*"
+    onChange={async (e) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+      const fileName = `${Date.now()}-${file.name}`
+      const { error } = await supabase.storage
+        .from("photos")
+        .upload(fileName, file)
+
+      if (error) {
+        alert("Ошибка загрузки файла")
+        return
+      }
+
+      const { data } = supabase.storage.from("photos").getPublicUrl(fileName)
+
+      if (data?.publicUrl) {
+        setFormData({ ...formData, imageUrl: data.publicUrl })
+      }
+    }}
+  />
+
+  <p className="text-xs text-muted-foreground">Вы можете загрузить файл или вставить URL</p>
+</div>
 
       <div className="grid md:grid-cols-3 gap-4">
         <div className="space-y-2">

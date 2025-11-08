@@ -12,7 +12,7 @@ import { usePhotos } from "@/lib/hooks/use-photos"
 import { useVideos } from "@/lib/hooks/use-videos"
 import { useExperiences } from "@/lib/hooks/use-supabase-experiences"
 import { LectureForm } from "@/components/admin/lecture-form"
-import { PhotoForm } from "@/components/admin/photo-form"
+import { PhotoForm }  from "@/components/admin/photo-form"
 import { VideoForm } from "@/components/admin/video-form"
 import { ExperienceForm } from "@/components/admin/experience-form"
 import type { Experience } from "@/lib/hooks/use-supabase-experiences"
@@ -120,7 +120,7 @@ export default function AdminPage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
             <div>
-              <h1 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">Панель администратора</h1>
+              <h1 className="text-4xl font-bold mb-2">Панель администратора</h1>
               <p className="text-muted-foreground">Управление содержимым методической копилки</p>
             </div>
           </div>
@@ -343,7 +343,7 @@ export default function AdminPage() {
             </DialogDescription>
           </DialogHeader>
           <PhotoForm
-            photo={editingPhoto}
+            photo ={editingPhoto}
             onSubmit={editingPhoto ? handleUpdatePhoto : handleAddPhoto}
             onCancel={() => {
               setIsAddPhotoDialogOpen(false)

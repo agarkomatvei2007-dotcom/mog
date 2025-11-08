@@ -1,38 +1,38 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, type ReactNode } from "react"
 
 interface AuthContextType {
   isAuthenticated: boolean
   isAdmin: boolean
-  login: (username: string, password: string) => boolean
+  login: (email: string, password: string) => boolean
   logout: () => void
+  register: (username: string, email: string, password: string) => boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-const ADMIN_USERNAME = "admin"
-const ADMIN_PASSWORD = "admin123"
+const ADMIN_EMAIL = "method@123"
+const ADMIN_PASSWORD = "method123"
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
-  useEffect(() => {
-    const auth = sessionStorage.getItem("isAuthenticated")
-    const adminStatus = sessionStorage.getItem("isAdmin")
-    if (auth === "true") {
-      setIsAuthenticated(true)
-      setIsAdmin(adminStatus === "true")
-    }
-  }, [])
+  const register = (username: string, email: string, password: string): boolean => {
+    if (!username || !email || password.length < 6) return false
 
-  const login = (username: string, password: string) => {
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    const isAdminUser = email === ADMIN_EMAIL && password === ADMIN_PASSWORD
+
+    setIsAuthenticated(true)
+    setIsAdmin(isAdminUser)
+    return true
+  }
+
+  const login = (email: string, password: string): boolean => {
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
       setIsAuthenticated(true)
       setIsAdmin(true)
-      sessionStorage.setItem("isAuthenticated", "true")
-      sessionStorage.setItem("isAdmin", "true")
       return true
     }
     return false
@@ -41,11 +41,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setIsAuthenticated(false)
     setIsAdmin(false)
-    sessionStorage.removeItem("isAuthenticated")
-    sessionStorage.removeItem("isAdmin")
   }
 
-  return <AuthContext.Provider value={{ isAuthenticated, isAdmin, login, logout }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, isAdmin, login, logout, register }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export function useAuth() {

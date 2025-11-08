@@ -47,15 +47,7 @@ export default function HomePage() {
             <p className="text-xl text-muted-foreground mb-8 text-pretty">
               Полезный ресурс для обмена педагогическим опытом, хранения материалов по разным дисциплинам
             </p>
-            <div className="flex flex-col gap-4  sm:flex-row flex justify-center">
-              <Link href="/lectures">
-                <Button size="lg">Перейти к материалам</Button>
-              </Link>
-              <Link href="/login">
-                <Button size="lg" variant="outline">
-                  Вход для администратора
-                </Button>
-              </Link>
+            <div className="flex flex-col gap-4  sm:flex-row flex justify-center">                
             </div>
           </div>
         </section>

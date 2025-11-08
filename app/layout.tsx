@@ -11,7 +11,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Методическая копилка",
   description: "Ресурс для обмена педагогическим опытом",
-  generator: "v0.app",
+  generator: "GymCoders",
 }
 
 export default function RootLayout({
