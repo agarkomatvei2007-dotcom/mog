@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
@@ -12,14 +13,14 @@ import { usePhotos } from "@/lib/hooks/use-photos"
 import { useVideos } from "@/lib/hooks/use-videos"
 import { useExperiences } from "@/lib/hooks/use-supabase-experiences"
 import { LectureForm } from "@/components/admin/lecture-form"
-import { PhotoForm }  from "@/components/admin/photo-form"
+import { PhotoForm }  from "@/components/admin/photo-form"  
 import { VideoForm } from "@/components/admin/video-form"
 import { ExperienceForm } from "@/components/admin/experience-form"
 import type { Experience } from "@/lib/hooks/use-supabase-experiences"
 import type { Lecture } from "@/lib/data/lectures"
 import type { Photo } from "@/lib/data/photos"
 import type { Video } from "@/lib/data/videos"
-import { Plus, Pencil, Trash2, BookOpen, ImageIcon, VideoIcon, MessageSquare } from "lucide-react"
+import { Plus, Pencil, Trash2, BookOpen, ImageIcon, VideoIcon, MessageSquare} from "lucide-react"
 
 export default function AdminPage() {
   const { isAuthenticated, isAdmin } = useAuth()
@@ -267,10 +268,14 @@ export default function AdminPage() {
                   </CardTitle>
                   <CardDescription>Всего записей: {experiences.length}</CardDescription>
                 </div>
-                <Button onClick={() => setIsAddExperienceDialogOpen(true)}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Добавить запись
-                </Button>
+                  {isAuthenticated && (
+                    <Link href="/experience/new">
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                      Поделиться опытом
+                    </Button>
+                    </Link>
+            )}
               </div>
             </CardHeader>
             <CardContent>

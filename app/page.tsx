@@ -22,7 +22,7 @@ export default function HomePage() {
       title: "Видеолекции",
       description: "Видеозаписи лекций и образовательных материалов",
       icon: Video,
-      href: "/videos",
+      href: "/videos",   
     },
     {
       title: "Обмен опытом",
@@ -111,7 +111,7 @@ export default function HomePage() {
                 <div className="container mx-auto text-right text-sm text-muted-foreground">
           <p>© 2025 Методическая копилка. При поддержке Gym Coders.</p>
         </div>
-      </footer>
+      </footer>     
     </div>
   )
-}
+}   

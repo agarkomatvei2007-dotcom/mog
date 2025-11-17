@@ -116,6 +116,9 @@ export default function RegisterPage() {
             Уже есть аккаунт?{" "}
             <Link href="/login" className="text-primary hover:underline">
               Войти
+            </Link><br />
+            <Link href="/" className="text-primary hover:underline">
+              На главную
             </Link>
           </p>
         </CardContent>

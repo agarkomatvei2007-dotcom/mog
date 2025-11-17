@@ -110,6 +110,9 @@ export default function LoginPage() {
             Нет аккаунта?{" "}
             <Link href="/register" className="text-primary hover:underline">
               Регистрация
+            </Link><br />
+                        <Link href="/" className="text-primary hover:underline">
+              На главную
             </Link>
           </p>
         </CardContent>
